@@ -13,9 +13,9 @@ Information about using capacitive sensors is available at (http://playground.ar
 
 Improvements and changes cheerfully accepted.
 
-![WS2811_bar](https://raw2.github.com/mage0r/WS2811_bar/master/Photos/2014-01-04%2015.56.35.jpg "10 digit bar graph controlled by ws2811 chips")
+![RSA0N11M9A0J_motorised_slider](https://github.com/mage0r/RSA0N11M9A0J_motorised_slider/raw/master/Photos/2014-01-23%2020.13.57.jpg )
 
-![RSA0N11M9A0J_motorised_slider](http://youtu.be/8nPtufL0bt4 "Motorised Slider Driver")
+[![screenshot](http://youtu.be/8nPtufL0bt4 "Motorised Slider Driver")]
 
 
 CREDITS
