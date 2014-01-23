@@ -15,7 +15,7 @@ Improvements and changes cheerfully accepted.
 
 ![RSA0N11M9A0J_motorised_slider](https://github.com/mage0r/RSA0N11M9A0J_motorised_slider/raw/master/Photos/2014-01-23%2020.13.57.jpg )
 
-[![screenshot](http://youtu.be/8nPtufL0bt4 "Motorised Slider Driver")]
+![screenshot](http://youtu.be/8nPtufL0bt4 "Motorised Slider Driver")
 
 
 CREDITS
