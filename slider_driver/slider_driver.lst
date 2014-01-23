@@ -1,0 +1,34 @@
+eeschema (2013-07-07 BZR 4022)-stable  >> Creation date: 12/01/2014 9:09:58 PM
+#Cmp ( order = Reference )
+| C1         0.1uf       
+| C2         10uf        
+| C3         0.1uf       
+| P1         CONN_1      
+| P2         CONN_1      
+| P3         CONN_1      
+| P4         CONN_1      
+| P5         CONN_1      
+| R1         10k         
+| R2         10k         
+| R3         1M          
+| U1         L9110       
+| U2         RSA0N11M9A0J
+#End Cmp
+
+#Cmp ( order = Value )
+| 0.1uf        C1        
+| 0.1uf        C3        
+| 10uf         C2        
+| CONN_1       P1        
+| CONN_1       P2        
+| CONN_1       P3        
+| CONN_1       P4        
+| CONN_1       P5        
+| 10k          R1        
+| 10k          R2        
+| 1M           R3        
+| RSA0N11M9A0J U2        
+| L9110        U1        
+#End Cmp
+
+#End List

@@ -1,0 +1,108 @@
+Cmp-Mod V01 Created by CvPcb (2013-07-07 BZR 4022)-stable date = 14/01/2014 7:13:39 PM
+
+BeginCmp
+TimeStamp = /52D16BBC;
+Reference = C1;
+ValeurCmp = 0.1uf;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /52D16BFE;
+Reference = C2;
+ValeurCmp = 10uf;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /52D1799E;
+Reference = C3;
+ValeurCmp = 0.1uf;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /52D2132C;
+Reference = P1;
+ValeurCmp = TOUCH1;
+IdModule  = 1pin_slider;
+EndCmp
+
+BeginCmp
+TimeStamp = /52D213EA;
+Reference = P2;
+ValeurCmp = TOUCH2;
+IdModule  = 1pin_slider;
+EndCmp
+
+BeginCmp
+TimeStamp = /52D214AD;
+Reference = P3;
+ValeurCmp = WIPER;
+IdModule  = 1pin_slider;
+EndCmp
+
+BeginCmp
+TimeStamp = /52D214BD;
+Reference = P4;
+ValeurCmp = IB;
+IdModule  = 1pin_slider;
+EndCmp
+
+BeginCmp
+TimeStamp = /52D2151F;
+Reference = P5;
+ValeurCmp = IA;
+IdModule  = 1pin_slider;
+EndCmp
+
+BeginCmp
+TimeStamp = /52D4F149;
+Reference = P6;
+ValeurCmp = +V;
+IdModule  = 1pin_slider;
+EndCmp
+
+BeginCmp
+TimeStamp = /52D4F14F;
+Reference = P7;
+ValeurCmp = GND;
+IdModule  = 1pin_slider;
+EndCmp
+
+BeginCmp
+TimeStamp = /52D17404;
+Reference = R1;
+ValeurCmp = 10k;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /52D17426;
+Reference = R2;
+ValeurCmp = 10k;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /52D2122A;
+Reference = R3;
+ValeurCmp = 1M;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = /52D17394;
+Reference = U1;
+ValeurCmp = L9110;
+IdModule  = so-8;
+EndCmp
+
+BeginCmp
+TimeStamp = /52D178D2;
+Reference = U2;
+ValeurCmp = RSA0N11M9A0J;
+IdModule  = RSA0N11M9A0J;
+EndCmp
+
+EndListe
