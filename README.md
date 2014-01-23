@@ -27,7 +27,7 @@ SPECIAL THANKS
 To the creators and maintainers of the KiCAD open-source EDA suite.
 To the HackMelbourne (CCHS, http://hackmelbourne.org) community of Melbourne, Australia.
 To all other open-source developers whose countless hours supported every other aspect of this design.
-Extra thanks to Bob because I copied his README.md almost verbatim...
+Extra thanks to Bob Powers (@rdpowers) because I copied his README.md almost verbatim...
 
 DISTRIBUTION
 ------------
