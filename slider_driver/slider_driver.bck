@@ -1,0 +1,28 @@
+EESchema-DOCLIB  Version 2.0  Date: 25/01/2014 11:46:34 PM
+#
+$CMP 3x7SEGMENTS
+D 3x7-Segment
+K 7 Segment YY5631BG
+$ENDCMP
+#
+$CMP 5_pin_socket
+D 5 Pin socket
+K 5_PIN
+$ENDCMP
+#
+$CMP 74HC595-16-pin
+D 8 bits serial in // out Shift Register 3 State Out
+K 74HC595
+$ENDCMP
+#
+$CMP I2C
+D I2C Header
+K I2C
+$ENDCMP
+#
+$CMP ISCP
+D ISCP Header
+K ISCP
+$ENDCMP
+#
+#End Doc Library
