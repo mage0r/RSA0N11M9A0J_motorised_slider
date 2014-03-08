@@ -4,110 +4,156 @@
   https://github.com/mage0r/RSA0N11M9A0J_motorised_slider
  */
  
- #include <CapacitiveSensor.h>
+ 
+ #include "OnePinCapSense.h"
+ #include <Adafruit_NeoPixel.h>
  
 boolean MoveSlider(int moveTo, int currentPosition, int motorIAPin, int motorIBPin, int deadZone, int maxSpeed, int minSpeed );
+boolean UpdateDisplay(int number);
+int Calibrate();
 
 // Pin variables.
-const int sendPin = 4; // this is the send pin for capacitive touch
-const int receivePin = 2; // this is the recieve pin for capacitive touch.
-const int motorIAPin = 3;
-const int motorIBPin = 5;
+const int capacitivePin = A1; // this is the send pin for capacitive touch
+const int motorIAPin = 7;
+const int motorIBPin = 8;
 const int sensorPin = A0;
+const int neopixel = 10;
 
+// serial out.
+const int clockPin = 3;
+const int dataPin = 2; // SER
+const int latchPin = 9;
 
-String inputString = "";         // a string to hold incoming data
-boolean stringComplete = false;  // whether the string is complete
+int baseLine = 0 ;
+const int offset = 50 ;
+int touched = 0 ;
+OnePinCapSense opcs = OnePinCapSense();
 
 int setTo; // value to set the slider too.
 boolean moveSlider = false;
+boolean forward = true;
 
-CapacitiveSensor   cs_4_2 = CapacitiveSensor(sendPin,receivePin);
+// This is an array of the different digit combinations
+const byte digits [11][2] =
+{
+  {0b00000110,0b00000000}, //0
+  {0b00000111,0b11001000}, //1
+  {0b00000101,0b00100000}, //2
+  {0b00000101,0b10000000}, //3
+  {0b00000100,0b11001000}, //4
+  {0b00000100,0b10010000}, //5
+  {0b00000100,0b00010000}, //6
+  {0b00000111,0b11000000}, //7
+  {0b00000100,0b00000000}, //8
+  {0b00000100,0b11000000}, //9
+  {0b00000011,0b11111000}, //.
+};
 
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(2, neopixel, NEO_GRB + NEO_KHZ800);
+
+int number=0;
+unsigned long update;
 
 void setup() {
   
-  //cs_4_2.set_CS_AutocaL_Millis(0xFFFFFFFF);
+  pinMode(dataPin, OUTPUT);
+  pinMode(latchPin, OUTPUT);
+  pinMode(clockPin, OUTPUT);
   
-  // initialize serial:
-  Serial.begin(9600);
-  // reserve 200 bytes for the inputString:
-  inputString.reserve(200);
+  pinMode(neopixel, OUTPUT);
+  
+  update = millis();
+  
+  Calibrate();
+  
+  strip.begin();
+  strip.show();
 }
 
 void loop() {
 
-  // This is just a simple way to send this program commands for testing.  
-  char inSerial;
-
-  if(Serial.available()){
-    inSerial = (char)Serial.read();
-    if (inSerial != ';'){
-      inputString += inSerial;
-    }
-    else {
-      stringComplete = true;
-    }
-  }
-
-  // The serial string is complete.  run a subroutine based on that.
-  if (stringComplete) {
-     
-    // String starting with "A" is to move Motor A;
-    if ( inputString.charAt(0) == 'A' ) {
-      
-      setTo = inputString.substring(1).toInt();
-      
-      if (setTo > 0)
-        moveSlider = true;
-      else
-        Serial.println(analogRead(sensorPin));
-       
-    } 
-    else if ( inputString.charAt(0) == 'P' ) {
-      // Output position as a Percentage.
-      Serial.print("MotorA at ");
-      Serial.print(map(analogRead(sensorPin),0,1024,0,100));
-      Serial.println("%");
-       
-    }
-    else if ( inputString.charAt(0) == 'C' ) {
-      Serial.println(cs_4_2.capacitiveSensor(30));
-    }
-    else if ( inputString.charAt(0) == '?' ) {
-      Serial.println("---Usage---");
-      Serial.println("`?;` - This text");
-      Serial.println("`A;` - Display current raw position");
-      Serial.println("`A<1-1024>;` - Move the slider to position. e.g. `A800;`");
-      Serial.println("`P;` - Position as a Percentage");
-    }
-    else {
-      // just stop moving if we get junk
-      moveSlider = false;
-    }
-    
-    // clear the string:
-    inputString = "";
-    stringComplete = false;
-    
-  }
-    
+  // This is just a simple way to send this program commands for testing.
   
-    // check that the pots are clear to move.
-  if (cs_4_2.capacitiveSensor(30) > 1000) {
- 
+  touched = opcs.readCapacitivePin(capacitivePin);
+  number = map(analogRead(sensorPin),0,1024,0,100);
+  UpdateDisplay(number);
+  
+  // simple movement
+  if (forward) {
+    setTo = 800;
+  }
+  else
+  {
+    setTo = 100;
+  }
+  
+  
+  digitalWrite(neopixel, LOW);
+  if (touched > baseLine) {
     setTo = analogRead(sensorPin);
   }
-
 
   
   // if we're meant to be moving, run the movement subroutine.
   if (moveSlider) {
     // if the subroutine has indicated that it has finished moving.
     // At 5v, I find anything less than 150 won't move the sliders
-    moveSlider = MoveSlider(setTo, analogRead(sensorPin), motorIAPin, motorIBPin, 10, 255, 200);
+    moveSlider = MoveSlider(setTo, analogRead(sensorPin), motorIAPin, motorIBPin, 10, 200, 200);
+  }else if (update < millis()-5000){
+    
+    if (forward)
+      forward = false;
+    else
+      forward = true;
+      
+      moveSlider = true;
+      
+      update = millis();
   }
 
+  // colour strip stuff
+  strip.setPixelColor(0, strip.Color(255, 0, 0));
+  strip.setPixelColor(1, strip.Color(255, 0, 0));
+
+}
+
+// update the 7 segment display
+// pretty much have to run this each iteration
+boolean UpdateDisplay(int number) {
+  
+  short ones=0, tens=0, hundreds=0;
+
+  hundreds = int(number/100);
+  
+  tens = int((number%100)/10);
+  
+  ones = int(number-(hundreds*100)-(tens*10));
+  
+  // write 100's
+  digitalWrite(latchPin, LOW);
+  // Send the value as a binary sequence to the module
+  shiftOut(dataPin, clockPin, MSBFIRST, digits[hundreds][0]);
+  shiftOut(dataPin, clockPin, MSBFIRST, (digits[hundreds][1]+0b00000100)); // binary addition here sets the segment
+  // Enable the latch again to set the output states
+  digitalWrite(latchPin, HIGH);
+  
+  // write 10's
+  digitalWrite(latchPin, LOW);
+  // Send the value as a binary sequence to the module
+  shiftOut(dataPin, clockPin, MSBFIRST, digits[tens][0]);
+  shiftOut(dataPin, clockPin, MSBFIRST, (digits[tens][1]+0b00000010)); // binary addition here sets the segment
+  // Enable the latch again to set the output states
+  digitalWrite(latchPin, HIGH);
+  
+  // write 1's
+  digitalWrite(latchPin, LOW);
+  // Send the value as a binary sequence to the module
+  shiftOut(dataPin, clockPin, MSBFIRST, digits[ones][0]);
+  shiftOut(dataPin, clockPin, MSBFIRST, (digits[ones][1]+0b00000001)); // binary addition here sets the segment
+  // Enable the latch again to set the output states
+  digitalWrite(latchPin, HIGH);
+  
+  return true; 
 }
 
 // This method moves the slider to requested position.
@@ -135,10 +181,32 @@ boolean MoveSlider(int moveTo, int currentPosition, int motorIAPin, int motorIBP
     else {
         digitalWrite(motorIAPin, LOW);
         digitalWrite(motorIBPin, LOW);
-        Serial.println("slider disengadged.");
+        //Serial.println("slider disengadged.");
         return false;
     }
     
-    return true;
-  
+    return true; 
 }
+
+// The calibrate function will find the highest quiescent sensor
+// value for all of the sensors and assign that to baseline.
+
+// It will offset to calculated baseLine and assign that to the
+// touched threshold.
+
+int Calibrate()
+{
+  int sample = 0 ;
+  
+  // take 30 samples and return the highest value for the pin
+     for( int j = 0 ; j < 30 ; j++ )
+     {
+       sample = opcs.readCapacitivePin(capacitivePin);
+       if( sample > baseLine)
+       {
+         baseLine = sample ;
+       }
+     }
+     
+  baseLine = baseLine + offset ;
+} // end of calibrate
