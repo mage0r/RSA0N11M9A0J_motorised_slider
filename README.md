@@ -13,7 +13,7 @@ Information about using capacitive sensors is available at (http://playground.ar
 
 Improvements and changes cheerfully accepted.
 
-![RSA0N11M9A0J_motorised_slider](https://github.com/mage0r/RSA0N11M9A0J_motorised_slider/raw/master/Photos/2014-03-13%2013.47.29.jpg )
+![RSA0N11M9A0J_motorised_slider](https://github.com/mage0r/RSA0N11M9A0J_motorised_slider/raw/master/Photos/2014-03-09%2013.47.29.jpg )
 
 (http://youtu.be/SSg5tWOZ5IY "ATtiny Slider Driver - Version 2")
 
