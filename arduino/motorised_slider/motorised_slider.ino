@@ -74,7 +74,10 @@ void loop() {
 
   // This is just a simple way to send this program commands for testing.
   
-  touched = opcs.readCapacitivePin(capacitivePin);
+  //if (update < millis()+200) {
+    touched = opcs.readCapacitivePin(capacitivePin);
+  //}
+  
   number = map(analogRead(sensorPin),0,1024,0,100);
   UpdateDisplay(number);
   
@@ -88,9 +91,15 @@ void loop() {
   }
   
   
-  digitalWrite(neopixel, LOW);
+
   if (touched > baseLine) {
     setTo = analogRead(sensorPin);
+    strip.setPixelColor(0, strip.Color(20, 0, 0));
+    strip.setPixelColor(1, strip.Color(20, 0, 0));
+  }
+  else {
+      strip.setPixelColor(0, strip.Color(0, 20, 0));
+      strip.setPixelColor(1, strip.Color(0, 20, 0));
   }
 
   
@@ -99,6 +108,8 @@ void loop() {
     // if the subroutine has indicated that it has finished moving.
     // At 5v, I find anything less than 150 won't move the sliders
     moveSlider = MoveSlider(setTo, analogRead(sensorPin), motorIAPin, motorIBPin, 10, 200, 200);
+    strip.setPixelColor(0, strip.Color(0, 0, 20));
+    strip.setPixelColor(1, strip.Color(0, 0, 20));
   }else if (update < millis()-5000){
     
     if (forward)
@@ -112,9 +123,7 @@ void loop() {
   }
 
   // colour strip stuff
-  strip.setPixelColor(0, strip.Color(255, 0, 0));
-  strip.setPixelColor(1, strip.Color(255, 0, 0));
-
+  strip.show();
 }
 
 // update the 7 segment display
@@ -150,6 +159,14 @@ boolean UpdateDisplay(int number) {
   // Send the value as a binary sequence to the module
   shiftOut(dataPin, clockPin, MSBFIRST, digits[ones][0]);
   shiftOut(dataPin, clockPin, MSBFIRST, (digits[ones][1]+0b00000001)); // binary addition here sets the segment
+  // Enable the latch again to set the output states
+  digitalWrite(latchPin, HIGH);
+  
+  // switch off.  Keeps the LED's at a consistent brightness.
+  digitalWrite(latchPin, LOW);
+  // Send the value as a binary sequence to the module
+  shiftOut(dataPin, clockPin, MSBFIRST, 0b00000111);
+  shiftOut(dataPin, clockPin, MSBFIRST, 0b11111000); // binary addition here sets the segment
   // Enable the latch again to set the output states
   digitalWrite(latchPin, HIGH);
   
