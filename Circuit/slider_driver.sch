@@ -38,7 +38,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title ""
-Date "1 mar 2014"
+Date "12 mar 2014"
 Rev ""
 Comp ""
 Comment1 ""
@@ -1022,4 +1022,28 @@ Wire Wire Line
 	9150 4200 9450 4200
 Wire Wire Line
 	9450 2950 10000 2950
+$Comp
+L CONN_1 P11
+U 1 1 53203875
+P 5550 2650
+F 0 "P11" H 5630 2650 40  0000 L CNN
+F 1 "GND" H 5550 2705 30  0001 C CNN
+F 2 "" H 5550 2650 60  0000 C CNN
+F 3 "" H 5550 2650 60  0000 C CNN
+	1    5550 2650
+	-1   0    0    1   
+$EndComp
+$Comp
+L CONN_1 P10
+U 1 1 5320387B
+P 3900 2500
+F 0 "P10" H 3980 2500 40  0000 L CNN
+F 1 "+V" H 3900 2555 30  0001 C CNN
+F 2 "" H 3900 2500 60  0000 C CNN
+F 3 "" H 3900 2500 60  0000 C CNN
+	1    3900 2500
+	1    0    0    -1  
+$EndComp
+Connection ~ 5700 2650
+Connection ~ 3750 2500
 $EndSCHEMATC

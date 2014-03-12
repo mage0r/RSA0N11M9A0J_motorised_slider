@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2013-07-07 BZR 4022)-stable date = 2/03/2014 4:27:46 AM
+Cmp-Mod V01 Created by CvPcb (2013-07-07 BZR 4022)-stable date = 12/03/2014 9:38:12 PM
 
 BeginCmp
 TimeStamp = /52E3CA34;
@@ -101,6 +101,20 @@ EndCmp
 BeginCmp
 TimeStamp = /52E248E7;
 Reference = P9;
+ValeurCmp = GND;
+IdModule  = 1pin_slider;
+EndCmp
+
+BeginCmp
+TimeStamp = /5320387B;
+Reference = P10;
+ValeurCmp = +V;
+IdModule  = 1pin_slider;
+EndCmp
+
+BeginCmp
+TimeStamp = /53203875;
+Reference = P11;
 ValeurCmp = GND;
 IdModule  = 1pin_slider;
 EndCmp
