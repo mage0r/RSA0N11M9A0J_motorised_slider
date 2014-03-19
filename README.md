@@ -9,7 +9,7 @@ There has three sections, a kicad circuit diagram, an arduino sketch using the c
 
 The specifications for the slider are available at (http://www.alps.com/WebObjects/catalog.woa/E/HTML/Potentiometer/SlidePotentiometers/RSN1M/RSA0N11M9A0J.html)
 
-Information about using capacitive sensors is available at (http://playground.arduino.cc//Main/CapacitiveSensor)
+There are two sketches in the arduino directory.  One for the attiny controller, another one with a basic i2c master for controlling the slaves.  Each sketch includes a list of required libraries.
 
 Improvements and changes cheerfully accepted.
 
@@ -27,6 +27,7 @@ SPECIAL THANKS
 To the creators and maintainers of the KiCAD open-source EDA suite.
 To the HackMelbourne (CCHS, http://hackmelbourne.org) community of Melbourne, Australia.
 To all other open-source developers whose countless hours supported every other aspect of this design.
+To Andy Gelme for feature creeping an attiny in the design.
 Extra thanks to Bob Powers (@rdpowers) because I copied his README.md almost verbatim...
 
 DISTRIBUTION

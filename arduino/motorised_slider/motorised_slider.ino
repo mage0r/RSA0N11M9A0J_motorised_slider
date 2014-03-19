@@ -2,15 +2,24 @@
   This test code moves a motor based slider up and down using a motor driver.
   John Spencer - 2014
   https://github.com/mage0r/RSA0N11M9A0J_motorised_slider
+  
+  You'll need the librarys from the following locations.
+  https://github.com/MrYsLab/OnePinCapSense
+  https://github.com/adafruit/Adafruit_NeoPixel
+  http://playground.arduino.cc/Code/USIi2c
  */
  
  
  #include "OnePinCapSense.h"
  #include <Adafruit_NeoPixel.h>
+ #include "TinyWireS.h"
+ 
+ // Change this for every slave!
+ #define I2C_SLAVE_ADDR  0x27
  
 boolean MoveSlider(int moveTo, int currentPosition, int motorIAPin, int motorIBPin, int deadZone, int maxSpeed, int minSpeed );
 boolean UpdateDisplay(int number);
-int Calibrate();
+void CalibrateCap(int offset);
 
 // Pin variables.
 const int capacitivePin = A1; // this is the send pin for capacitive touch
@@ -19,19 +28,25 @@ const int motorIBPin = 8;
 const int sensorPin = A0;
 const int neopixel = 10;
 
-// serial out.
+// serial out for 7 segment
 const int clockPin = 3;
 const int dataPin = 2; // SER
 const int latchPin = 9;
 
-int baseLine = 0 ;
-const int offset = 50 ;
-int touched = 0 ;
+// Cap sense variables.
+int baseLine = 0 ; // set by the calibration method
 OnePinCapSense opcs = OnePinCapSense();
 
-int setTo; // value to set the slider too.
-boolean moveSlider = false;
-boolean forward = true;
+// movement variables.
+unsigned int moveTo; // value to set the slider too.
+boolean moveSlider = false; // do we need to move the slider?
+unsigned int currentPosition; // previous 3 rolling values.
+unsigned long update; // 
+unsigned int sliderDeadZone = 10;
+
+// data string input
+String inputString = "";
+boolean stringComplete = false;
 
 // This is an array of the different digit combinations
 const byte digits [11][2] =
@@ -51,10 +66,9 @@ const byte digits [11][2] =
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(2, neopixel, NEO_GRB + NEO_KHZ800);
 
-int number=0;
-unsigned long update;
-
 void setup() {
+  
+  TinyWireS.begin(I2C_SLAVE_ADDR);
   
   pinMode(dataPin, OUTPUT);
   pinMode(latchPin, OUTPUT);
@@ -64,7 +78,13 @@ void setup() {
   
   update = millis();
   
-  Calibrate();
+  // Calibrate the cap sense.
+  CalibrateCap(20);
+  
+  // set expected position to current position.
+  moveTo = analogRead(sensorPin);
+  
+  inputString.reserve(50);
   
   strip.begin();
   strip.show();
@@ -72,71 +92,106 @@ void setup() {
 
 void loop() {
 
-  // This is just a simple way to send this program commands for testing.
+  char inI2C; // i2c temp variable.
   
-  //if (update < millis()+200) {
-    touched = opcs.readCapacitivePin(capacitivePin);
-  //}
+  if (TinyWireS.available()){           // got I2C input!
   
-  number = map(analogRead(sensorPin),0,1024,0,100);
-  UpdateDisplay(number);
-  
-  // simple movement
-  if (forward) {
-    setTo = 800;
-  }
-  else
-  {
-    setTo = 100;
+    inI2C = (char)TinyWireS.receive();     // get the byte from master
+    // ; is the end command string.
+      if(inI2C != ';'){
+        inputString += inI2C;
+      }
+      else
+        stringComplete = true;
   }
   
-  
-
-  if (touched > baseLine) {
-    setTo = analogRead(sensorPin);
-    strip.setPixelColor(0, strip.Color(20, 0, 0));
-    strip.setPixelColor(1, strip.Color(20, 0, 0));
+  // We've received a full command.  Match it to our existing members.
+  if(stringComplete) {
+    
+    if( inputString.charAt(0) == 'M' ){
+      // Move the motor to a set position
+      moveTo = inputString.substring(1).toInt();
+      moveSlider = true;
+    }
+    else if ( inputString.charAt(0) == 'U' ) {
+      // move the slider up a bit.
+      moveTo = moveTo + inputString.substring(1).toInt();
+      moveSlider = true;
+    }
+    else if ( inputString.charAt(0) == 'D' ) {
+      // move the slider down a bit.
+      moveTo = moveTo - inputString.substring(1).toInt();
+      moveSlider = true;
+    }
+    else if ( inputString.charAt(0) == 'C' ) {
+      // re-run the capsense calibration.
+      CalibrateCap(inputString.substring(1).toInt());
+    }
+    else if ( inputString.charAt(0) == 'Z' ) {
+      // adjust the deadzone for movement.
+      sliderDeadZone = inputString.substring(1).toInt();
+    }
+    else if( inputString.charAt(0) == 'E' ){
+      // Flag error and get user to move to position.
+      moveTo = inputString.substring(1).toInt();
+    }
+    
+    // Clear the stream out for the next command.
+    inputString = "";
+    stringComplete = false;
   }
-  else {
+  
+  
+  if(currentPosition - analogRead(sensorPin) > sliderDeadZone || analogRead(sensorPin) - currentPosition > sliderDeadZone)
+    currentPosition = analogRead(sensorPin);
+  
+  // Update the display with our current position
+  // Currently the display only supports between 0 and 999
+  UpdateDisplay(currentPosition);
+  
+  // Before updating anything, check if we've been touched or not.
+  if (opcs.readCapacitivePin(capacitivePin) > baseLine) {
+    // On detect, this will resume movement after 5 seconds (hard coded below)
+    update = millis();
+    // As an alternative, just stop moving.
+    // moveSlider = false;
+  }
+  
+  
+  if (moveTo-currentPosition < sliderDeadZone || currentPosition-moveTo < sliderDeadZone) {
+      // we're where we expect to be!  happy green.
       strip.setPixelColor(0, strip.Color(0, 20, 0));
       strip.setPixelColor(1, strip.Color(0, 20, 0));
-  }
-
-  
-  // if we're meant to be moving, run the movement subroutine.
-  if (moveSlider) {
-    // if the subroutine has indicated that it has finished moving.
+  } else if (moveSlider && update < millis()-5000) {
+    // We'd like to move, but also check that a timer trigger hasn't happened.
     // At 5v, I find anything less than 150 won't move the sliders
-    moveSlider = MoveSlider(setTo, analogRead(sensorPin), motorIAPin, motorIBPin, 10, 200, 200);
+    // do a fresh analogRead here
+    moveSlider = MoveSlider(moveTo, analogRead(sensorPin), motorIAPin, motorIBPin, sliderDeadZone, 200, 200);
+    
+    // Set our colour to be "automation in progress" scheme
     strip.setPixelColor(0, strip.Color(0, 0, 20));
     strip.setPixelColor(1, strip.Color(0, 0, 20));
-  }else if (update < millis()-5000){
-    
-    if (forward)
-      forward = false;
-    else
-      forward = true;
-      
-      moveSlider = true;
-      
-      update = millis();
+  } else {
+    // We want you to move manually!
+      strip.setPixelColor(0, strip.Color(20, 0, 0));
+      strip.setPixelColor(1, strip.Color(20, 0, 0));
   }
 
-  // colour strip stuff
+  // update our colour strip
   strip.show();
 }
 
 // update the 7 segment display
 // pretty much have to run this each iteration
-boolean UpdateDisplay(int number) {
+boolean UpdateDisplay(int displayNumber) {
   
   short ones=0, tens=0, hundreds=0;
 
-  hundreds = int(number/100);
+  hundreds = int(displayNumber/100);
   
-  tens = int((number%100)/10);
+  tens = int((displayNumber%100)/10);
   
-  ones = int(number-(hundreds*100)-(tens*10));
+  ones = int(displayNumber-(hundreds*100)-(tens*10));
   
   // write 100's
   digitalWrite(latchPin, LOW);
@@ -211,7 +266,7 @@ boolean MoveSlider(int moveTo, int currentPosition, int motorIAPin, int motorIBP
 // It will offset to calculated baseLine and assign that to the
 // touched threshold.
 
-int Calibrate()
+void CalibrateCap(int offset)
 {
   int sample = 0 ;
   

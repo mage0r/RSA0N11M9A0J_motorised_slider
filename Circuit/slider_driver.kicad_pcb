@@ -3,7 +3,7 @@
   (general
     (links 89)
     (no_connects 0)
-    (area 11.949999 11.949999 111.450001 50.600001)
+    (area 11.770999 10.661 111.629001 50.794501)
     (thickness 1.6)
     (drawings 13)
     (tracks 399)
@@ -482,7 +482,7 @@
     )
   )
 
-  (module 1pin_slider (layer F.Cu) (tedit 53121D35) (tstamp 52D4F1C8)
+  (module 1pin_slider (layer F.Cu) (tedit 532987A3) (tstamp 52D4F1C8)
     (at 104.25 26.3)
     (descr "module 1 pin")
     (tags DEV)
@@ -490,7 +490,7 @@
     (fp_text reference P6 (at 0 -3.048) (layer F.SilkS) hide
       (effects (font (size 1.016 1.016) (thickness 0.254)))
     )
-    (fp_text value +V (at 0 3) (layer F.SilkS)
+    (fp_text value +12V (at 0 3) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_circle (center 0 0) (end 0 -2.286) (layer F.SilkS) (width 0.381))
@@ -518,7 +518,7 @@
     )
   )
 
-  (module 1pin_slider (layer F.Cu) (tedit 53121D2F) (tstamp 52E2494A)
+  (module 1pin_slider (layer F.Cu) (tedit 5329879D) (tstamp 52E2494A)
     (at 97.45 26.3)
     (descr "module 1 pin")
     (tags DEV)
@@ -526,7 +526,7 @@
     (fp_text reference P8 (at 0 -3.048) (layer F.SilkS) hide
       (effects (font (size 1.016 1.016) (thickness 0.254)))
     )
-    (fp_text value +V (at 0 3) (layer F.SilkS)
+    (fp_text value +5V (at 0 3) (layer F.SilkS)
       (effects (font (size 1 1) (thickness 0.15)))
     )
     (fp_circle (center 0 0) (end 0 -2.286) (layer F.SilkS) (width 0.381))
@@ -1647,7 +1647,7 @@
     )
   )
 
-  (gr_text SDC (at 65.8 14.6) (layer F.SilkS)
+  (gr_text SCL (at 65.8 14.6) (layer F.SilkS)
     (effects (font (size 0.4 0.4) (thickness 0.1)))
   )
   (gr_text SDA (at 63.2 14.6) (layer F.SilkS)
