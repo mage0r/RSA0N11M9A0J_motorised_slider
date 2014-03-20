@@ -17,6 +17,8 @@ Improvements and changes cheerfully accepted.
 
 (http://youtu.be/SSg5tWOZ5IY "ATtiny Slider Driver - Version 2")
 
+(http://youtu.be/dVUSyDtoAqI "ATtiny 84 Motorised Slider - Version 3 ")
+
 
 CREDITS
 ------------
