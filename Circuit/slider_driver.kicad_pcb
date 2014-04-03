@@ -20,7 +20,7 @@
     (17 F.Adhes user)
     (18 B.Paste user)
     (19 F.Paste user)
-    (20 B.SilkS user hide)
+    (20 B.SilkS user)
     (21 F.SilkS user)
     (22 B.Mask user)
     (23 F.Mask user)
@@ -83,7 +83,7 @@
       (mirror false)
       (drillshape 0)
       (scaleselection 1)
-      (outputdirectory ../Photos/))
+      (outputdirectory Gerber/))
   )
 
   (net 0 "")
