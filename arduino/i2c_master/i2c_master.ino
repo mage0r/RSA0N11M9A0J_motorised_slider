@@ -12,21 +12,25 @@
 */
 
 #include <Wire.h>
-int selection=0;
-int ATtinyAddress=0x26;
+byte ATtinyAddress=0x26;
 
 String inputString = "";         // a string to hold incoming data
 boolean stringComplete = false;  // whether the string is complete
+String receiveString = "";
+boolean receiveComplete = false;
 
 void setup(){
     Wire.begin();
     Serial.begin(9600);
     inputString.reserve(200);
+    findDevices();
     PrintMenu();
+    
 }
 void loop(){
   
-  char inSerial; // temporty serial character
+  char inSerial; // temporary serial character
+  char inWire;
   
   if(Serial.available()){
      inSerial = (char)Serial.read();
@@ -40,8 +44,11 @@ void loop(){
    if (stringComplete) {
      if ( inputString.charAt(0) == 'A' ) {
        ATtinyAddress = inputString.substring(1,inputString.length()-1).toInt();
-       Serial.print("Writing to device: ");
-       Serial.println(ATtinyAddress);
+       Serial.print("Writing to device: 0x");
+       Serial.println(ATtinyAddress,HEX);
+     }
+     else if ( inputString.charAt(0) == 'F' ) {
+       findDevices();
      }
      else
      {
@@ -50,6 +57,19 @@ void loop(){
      
      inputString = "";
      stringComplete = false;
+   }
+   
+   if (Wire.available()) {
+     inWire = (char)Wire.read();
+     
+       receiveString += inWire;
+     
+     if (inWire == ';')
+       receiveComplete = true;
+   }
+   
+   if (receiveComplete) {
+     Serial.println(receiveString);
    }
   
 }
@@ -72,4 +92,30 @@ void SendI2C(byte device,String data) {
   data.toCharArray(buffer,32);
   Wire.write(buffer);
   Wire.endTransmission();
+}
+
+void findDevices()
+{
+  byte error, address;
+
+  Serial.println("Scanning for i2c devices...");
+
+  for(address = 1; address < 127; address++ ) 
+  {
+    // The i2c_scanner uses the return value of
+    // the Write.endTransmisstion to see if
+    // a device did acknowledge to the address.
+    Wire.beginTransmission(address);
+    error = Wire.endTransmission();
+
+    if (error == 0)
+    {
+      Serial.print("I2C device found at address 0x");
+      if (address<16) 
+        Serial.print("0");
+      Serial.print(address,HEX);
+      Serial.println("  !");
+    }
+  }
+  Serial.println("Done Scanning.");
 }

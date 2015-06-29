@@ -3,19 +3,25 @@
   John Spencer - 2014
   https://github.com/mage0r/RSA0N11M9A0J_motorised_slider
   
-  You'll need the librarys from the following locations.
+  You'll need the libraries from the following locations.
   https://github.com/MrYsLab/OnePinCapSense
   https://github.com/adafruit/Adafruit_NeoPixel
   http://playground.arduino.cc/Code/USIi2c
  */
  
+ /* To Do
+  * ~~~~~
+  * - Store / recall I2C address in EEPROM.
+  */
  
  #include "OnePinCapSense.h"
  #include <Adafruit_NeoPixel.h>
  #include "TinyWireS.h"
  
- // Change this for every slave!
- #define I2C_SLAVE_ADDR  0x27
+ #include <EEPROM.h>
+ 
+int eeprom_address = 0;
+byte i2c_slave_addr;
  
 boolean MoveSlider(int moveTo, int currentPosition, int motorIAPin, int motorIBPin, int deadZone, int maxSpeed, int minSpeed );
 boolean UpdateDisplay(int number);
@@ -68,7 +74,14 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(2, neopixel, NEO_GRB + NEO_KHZ800);
 
 void setup() {
   
-  TinyWireS.begin(I2C_SLAVE_ADDR);
+  // get i2c address.  If one doesn't exist, set the default.
+  i2c_slave_addr = EEPROM.read(eeprom_address);
+  if(!i2c_slave_addr || i2c_slave_addr == 255) { //empty address
+    EEPROM.write(eeprom_address, 38); // we're defaulting to 38
+    i2c_slave_addr = 38;
+  }
+  
+  TinyWireS.begin(i2c_slave_addr);
   
   pinMode(dataPin, OUTPUT);
   pinMode(latchPin, OUTPUT);
@@ -113,6 +126,11 @@ void loop() {
       moveTo = inputString.substring(1).toInt();
       moveSlider = true;
     }
+    else if ( inputString.charAt(0) == 'R' ) {
+      i2c_slave_addr = inputString.substring(2,inputString.length()).toInt();
+      EEPROM.write(eeprom_address, i2c_slave_addr);
+      TinyWireS.begin(i2c_slave_addr);
+    }
     else if ( inputString.charAt(0) == 'U' ) {
       // move the slider up a bit.
       moveTo = moveTo + inputString.substring(1).toInt();
@@ -133,7 +151,41 @@ void loop() {
     }
     else if( inputString.charAt(0) == 'E' ){
       // Flag error and get user to move to position.
-      moveTo = inputString.substring(1).toInt();
+      moveTo = inputString.substring(1).toInt(); 
+    }
+    else if( inputString.charAt(0) == 'P' ){
+      // Request for Position information
+      // reuse inputString for output - ugly.
+      inputString = "P";
+      inputString += String(analogRead(sensorPin));
+      inputString += ";";
+      char buffer[32];
+      inputString.toCharArray(buffer,32);
+      for(int i = 0; i < 32; i++) {
+        if(buffer[i])
+          TinyWireS.send(buffer[i]);
+        else
+          break;
+      }
+    }
+    else if( inputString.charAt(0) == 'S' ){
+      // Request for current settings.
+      // Current Position, Dead Zone, CapSense offset and speed offset
+      inputString = "P";
+      inputString += String(analogRead(sensorPin));
+      inputString += ";";
+      inputString += "Z";
+      inputString += String(sliderDeadZone);
+      inputString += ";";
+      char buffer[32];
+      inputString.toCharArray(buffer,32);
+      for(int i = 0; i < 32; i++) {
+        if(buffer[i])
+          TinyWireS.send(buffer[i]);
+        else
+          break;
+      }
+      
     }
     
     // Clear the stream out for the next command.
@@ -152,9 +204,9 @@ void loop() {
   // Before updating anything, check if we've been touched or not.
   if (opcs.readCapacitivePin(capacitivePin) > baseLine) {
     // On detect, this will resume movement after 5 seconds (hard coded below)
-    update = millis();
+    // update = millis();
     // As an alternative, just stop moving.
-    // moveSlider = false;
+    moveSlider = false;
   }
   
   
