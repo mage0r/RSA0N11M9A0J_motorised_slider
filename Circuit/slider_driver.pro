@@ -1,4 +1,4 @@
-update=26/01/2014 2:20:38 AM
+update=28/06/2015 2:19:39 AM
 version=1
 last_client=cvpcb
 [general]
@@ -41,6 +41,7 @@ LibName15=pga_sockets
 LibName16=valves
 LibName17=slider_driver
 LibName18=C:/Users/mage/Dropbox/Circuits/1pin_backpack/1pin_backpack
+LibName19=C:/Users/mage/Dropbox/Circuits/Libraries/mage_mega
 LibDir=
 [eeschema]
 version=1
@@ -83,6 +84,8 @@ LibName29=atmel
 LibName30=contrib
 LibName31=valves
 LibName32=slider_driver-cache
+LibName33=C:/Users/mage/Dropbox/Circuits/Libraries/w_logic
+LibName34=C:/Users/mage/Dropbox/Circuits/Libraries/mages_mega
 [cvpcb]
 version=1
 NetIExt=net
