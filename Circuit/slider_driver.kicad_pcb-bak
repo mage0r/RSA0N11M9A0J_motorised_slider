@@ -3,7 +3,7 @@
   (general
     (links 72)
     (no_connects 2)
-    (area 11.770999 9.9364 111.629001 83.194501)
+    (area 11.770999 11.770999 111.629001 53.194501)
     (thickness 1.6)
     (drawings 21)
     (tracks 316)
@@ -1045,14 +1045,14 @@
     )
   )
 
-  (module 5pin_display (layer F.Cu) (tedit 52E3DD2D) (tstamp 558ECED6)
+  (module 5pin_display (layer F.Cu) (tedit 55912030) (tstamp 558ECED6)
     (at 47.5 42.2 90)
     (tags display)
     (path /558EC94A)
     (fp_text reference P1 (at 0 -2.54 90) (layer F.SilkS) hide
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
-    (fp_text value 5_PIN_SOCKET (at 0 4 90) (layer F.SilkS) hide
+    (fp_text value 5_PIN_SOCKET (at 3.9 -2.9 90) (layer F.SilkS) hide
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
     (fp_text user RCLK (at 5 1.5 90) (layer F.SilkS)
