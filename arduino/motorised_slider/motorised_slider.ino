@@ -4,7 +4,6 @@
   https://github.com/mage0r/RSA0N11M9A0J_motorised_slider
   
   You'll need the libraries from the following locations.
-  https://github.com/MrYsLab/OnePinCapSense
   https://github.com/adafruit/Adafruit_NeoPixel
   http://playground.arduino.cc/Code/USIi2c
  */
@@ -14,13 +13,15 @@
   * - Store / recall I2C address in EEPROM.
   */
  
- #include "OnePinCapSense.h"
+ #include <CapacitiveSensor.h>
  #include <Adafruit_NeoPixel.h>
  #include "TinyWireS.h"
  
  #include <EEPROM.h>
  
-int eeprom_address = 0;
+// i2c Address stuff.
+#define i2c_eeprom_address 0 // Always gonna be the first bit.
+
 byte i2c_slave_addr;
  
 boolean MoveSlider(int moveTo, int currentPosition, int motorIAPin, int motorIBPin, int deadZone, int maxSpeed, int minSpeed );
@@ -40,8 +41,7 @@ const int dataPin = 2; // SER
 const int latchPin = 9;
 
 // Cap sense variables.
-int baseLine = 0 ; // set by the calibration method
-OnePinCapSense opcs = OnePinCapSense();
+CapacitiveSensor cap_touch = CapacitiveSensor(5,1);
 
 // movement variables.
 unsigned int moveTo; // value to set the slider too.
@@ -75,9 +75,9 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(2, neopixel, NEO_GRB + NEO_KHZ800);
 void setup() {
   
   // get i2c address.  If one doesn't exist, set the default.
-  i2c_slave_addr = EEPROM.read(eeprom_address);
+  i2c_slave_addr = EEPROM.read(i2c_eeprom_address);
   if(!i2c_slave_addr || i2c_slave_addr == 255) { //empty address
-    EEPROM.write(eeprom_address, 38); // we're defaulting to 38
+    EEPROM.write(i2c_eeprom_address, 38); // we're defaulting to 38
     i2c_slave_addr = 38;
   }
   
@@ -92,7 +92,7 @@ void setup() {
   update = millis();
   
   // Calibrate the cap sense.
-  CalibrateCap(20);
+  //cap_touch.set_CS_AutocaL_Millis(0xFFFFFFFF);
   
   // set expected position to current position.
   moveTo = analogRead(sensorPin);
@@ -117,7 +117,10 @@ void loop() {
       else
         stringComplete = true;
   }
-  
+
+  moveTo = 800;
+  moveSlider = true;
+
   // We've received a full command.  Match it to our existing members.
   if(stringComplete) {
     
@@ -128,7 +131,7 @@ void loop() {
     }
     else if ( inputString.charAt(0) == 'R' ) {
       i2c_slave_addr = inputString.substring(2,inputString.length()).toInt();
-      EEPROM.write(eeprom_address, i2c_slave_addr);
+      EEPROM.write(i2c_eeprom_address, i2c_slave_addr);
       TinyWireS.begin(i2c_slave_addr);
     }
     else if ( inputString.charAt(0) == 'U' ) {
@@ -202,8 +205,8 @@ void loop() {
   UpdateDisplay(currentPosition);
   
   // Before updating anything, check if we've been touched or not.
-  if (opcs.readCapacitivePin(capacitivePin) > baseLine) {
-    // On detect, this will resume movement after 5 seconds (hard coded below)
+  if (cap_touch.capacitiveSensor(5) > baseLine) {
+      // On detect, this will resume movement after 5 seconds (hard coded below)
     // update = millis();
     // As an alternative, just stop moving.
     moveSlider = false;
@@ -311,26 +314,3 @@ boolean MoveSlider(int moveTo, int currentPosition, int motorIAPin, int motorIBP
     
     return true; 
 }
-
-// The calibrate function will find the highest quiescent sensor
-// value for all of the sensors and assign that to baseline.
-
-// It will offset to calculated baseLine and assign that to the
-// touched threshold.
-
-void CalibrateCap(int offset)
-{
-  int sample = 0 ;
-  
-  // take 30 samples and return the highest value for the pin
-     for( int j = 0 ; j < 30 ; j++ )
-     {
-       sample = opcs.readCapacitivePin(capacitivePin);
-       if( sample > baseLine)
-       {
-         baseLine = sample ;
-       }
-     }
-     
-  baseLine = baseLine + offset ;
-} // end of calibrate
