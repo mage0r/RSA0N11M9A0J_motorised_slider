@@ -1,4 +1,5 @@
 EESchema Schematic File Version 2
+LIBS:slider_driver-rescue
 LIBS:slider_driver
 LIBS:power
 LIBS:device
@@ -11,7 +12,6 @@ LIBS:cmos4000
 LIBS:adc-dac
 LIBS:memory
 LIBS:xilinx
-LIBS:special
 LIBS:microcontrollers
 LIBS:dsp
 LIBS:microchip
@@ -33,8 +33,7 @@ LIBS:valves
 LIBS:slider_driver-cache
 LIBS:w_logic
 LIBS:mages_mega
-LIBS:slider_driver-cache
-EELAYER 27 0
+EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -49,7 +48,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L C C1
+L C-RESCUE-slider_driver C1
 U 1 1 52D16BBC
 P 900 800
 F 0 "C1" H 900 900 40  0000 L CNN
@@ -71,7 +70,7 @@ F 3 "" H 900 600 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR4
+L GND-RESCUE-slider_driver #PWR4
 U 1 1 52D16BF1
 P 900 1000
 F 0 "#PWR4" H 900 1000 30  0001 C CNN
@@ -82,7 +81,7 @@ F 3 "" H 900 1000 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C2
+L C-RESCUE-slider_driver C2
 U 1 1 52D16BFE
 P 1100 800
 F 0 "C2" H 1100 900 40  0000 L CNN
@@ -101,7 +100,7 @@ Wire Wire Line
 Wire Wire Line
 	1100 600  900  600 
 $Comp
-L R R3
+L R-RESCUE-slider_driver R3
 U 1 1 52D2122A
 P 7100 1200
 F 0 "R3" V 7180 1200 40  0000 C CNN
@@ -123,7 +122,7 @@ F 3 "" H 9950 1500 60  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L GND #PWR32
+L GND-RESCUE-slider_driver #PWR32
 U 1 1 52E38A27
 P 11000 900
 F 0 "#PWR32" H 11000 900 30  0001 C CNN
@@ -156,7 +155,7 @@ F 3 "" H 650 600 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R15
+L R-RESCUE-slider_driver R15
 U 1 1 530DF127
 P 650 850
 F 0 "R15" V 730 850 40  0000 C CNN
@@ -167,7 +166,7 @@ F 3 "~" H 650 850 30  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L LED D1
+L LED-RESCUE-slider_driver D1
 U 1 1 530DF147
 P 650 1300
 F 0 "D1" H 650 1400 50  0000 C CNN
@@ -178,7 +177,7 @@ F 3 "~" H 650 1300 60  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #PWR2
+L GND-RESCUE-slider_driver #PWR2
 U 1 1 530DF16F
 P 650 1500
 F 0 "#PWR2" H 650 1500 30  0001 C CNN
@@ -211,7 +210,7 @@ F 3 "" H 10400 2600 60  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR31
+L GND-RESCUE-slider_driver #PWR31
 U 1 1 558EB6FB
 P 10400 3000
 F 0 "#PWR31" H 10400 3000 30  0001 C CNN
@@ -247,7 +246,7 @@ F 3 "~" H 9200 4000 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR27
+L GND-RESCUE-slider_driver #PWR27
 U 1 1 558EB919
 P 9900 4500
 F 0 "#PWR27" H 9900 4500 30  0001 C CNN
@@ -258,7 +257,7 @@ F 3 "" H 9900 4500 60  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR26
+L GND-RESCUE-slider_driver #PWR26
 U 1 1 558EB91F
 P 9900 3500
 F 0 "#PWR26" H 9900 3500 30  0001 C CNN
@@ -291,7 +290,7 @@ F 3 "" H 8450 4200 60  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L R R4
+L R-RESCUE-slider_driver R4
 U 1 1 558EB931
 P 10100 3550
 F 0 "R4" V 10180 3550 40  0000 C CNN
@@ -302,7 +301,7 @@ F 3 "~" H 10100 3550 30  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R R5
+L R-RESCUE-slider_driver R5
 U 1 1 558EB937
 P 10100 4450
 F 0 "R5" V 10180 4450 40  0000 C CNN
@@ -373,7 +372,7 @@ F 3 "" H 6650 2700 60  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L GND #PWR19
+L GND-RESCUE-slider_driver #PWR19
 U 1 1 558EBB0B
 P 6650 2500
 F 0 "#PWR19" H 6650 2500 30  0001 C CNN
@@ -402,7 +401,7 @@ Wire Wire Line
 Wire Wire Line
 	6650 2250 6650 2200
 $Comp
-L C C3
+L C-RESCUE-slider_driver C3
 U 1 1 558EBC5A
 P 8050 4000
 F 0 "C3" H 8050 4100 40  0000 L CNN
@@ -440,7 +439,7 @@ Wire Wire Line
 	6850 1100 6850 1200
 Connection ~ 7350 1200
 $Comp
-L R R2
+L R-RESCUE-slider_driver R2
 U 1 1 558EBDEA
 P 8550 900
 F 0 "R2" V 8630 900 40  0000 C CNN
@@ -487,7 +486,7 @@ Wire Wire Line
 Text GLabel 8300 1450 0    60   Input ~ 0
 Send
 $Comp
-L 5_PIN_SOCKET P2
+L 5_pin_socket P2
 U 1 1 558EBF59
 P 4650 900
 F 0 "P2" V 4800 900 50  0000 C CNN
@@ -509,7 +508,7 @@ F 3 "" H 4450 1300 60  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L GND #PWR18
+L GND-RESCUE-slider_driver #PWR18
 U 1 1 558EC04D
 P 4550 1300
 F 0 "#PWR18" H 4550 1300 30  0001 C CNN
@@ -558,7 +557,7 @@ F 3 "" H 3000 4450 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR14
+L GND-RESCUE-slider_driver #PWR14
 U 1 1 558EC4EE
 P 3050 5500
 F 0 "#PWR14" H 3050 5500 30  0001 C CNN
@@ -585,7 +584,7 @@ F 3 "" H 3000 3450 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 3X7SEGMENTS_1 AFF1
+L 3x7SEGMENTS_1 AFF1
 U 1 1 558EC889
 P 4600 4950
 F 0 "AFF1" H 4150 5500 60  0000 C CNN
@@ -618,7 +617,7 @@ NoConn ~ 3500 4050
 NoConn ~ 3500 3950
 NoConn ~ 2700 4400
 $Comp
-L R R1
+L R-RESCUE-slider_driver R1
 U 1 1 558EC92B
 P 2700 3450
 F 0 "R1" V 2780 3450 40  0000 C CNN
@@ -640,7 +639,7 @@ F 3 "" H 2700 3200 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 5_PIN_SOCKET P1
+L 5_pin_socket P1
 U 1 1 558EC94A
 P 2200 3800
 F 0 "P1" V 2350 3800 50  0000 C CNN
@@ -651,7 +650,7 @@ F 3 "" H 2200 3800 60  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L GND #PWR8
+L GND-RESCUE-slider_driver #PWR8
 U 1 1 558EC950
 P 2100 4200
 F 0 "#PWR8" H 2100 4200 30  0001 C CNN
@@ -707,7 +706,7 @@ F 3 "" H 7700 1000 60  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L GND #PWR22
+L GND-RESCUE-slider_driver #PWR22
 U 1 1 558ECE46
 P 7900 1000
 F 0 "#PWR22" H 7900 1000 30  0001 C CNN
@@ -788,7 +787,7 @@ F 3 "" H 2650 1150 60  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L GND #PWR10
+L GND-RESCUE-slider_driver #PWR10
 U 1 1 559116BD
 P 2550 1150
 F 0 "#PWR10" H 2550 1150 30  0001 C CNN
@@ -799,7 +798,7 @@ F 3 "" H 2550 1150 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C4
+L C-RESCUE-slider_driver C4
 U 1 1 55911883
 P 1950 5150
 F 0 "C4" H 1950 5250 40  0000 L CNN
@@ -821,7 +820,7 @@ F 3 "" H 1950 4950 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR6
+L GND-RESCUE-slider_driver #PWR6
 U 1 1 5591188F
 P 1950 5350
 F 0 "#PWR6" H 1950 5350 30  0001 C CNN
@@ -832,7 +831,7 @@ F 3 "" H 1950 5350 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C C5
+L C-RESCUE-slider_driver C5
 U 1 1 55911895
 P 2150 5150
 F 0 "C5" H 2150 5250 40  0000 L CNN
